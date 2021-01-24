@@ -93,9 +93,8 @@ class Solver:
                 if self.args.cuda:
                     lab_real_preds = lab_real_preds.cuda()
                     unlab_real_preds = unlab_real_preds.cuda()
-
-                dsc_loss = self.bce_loss(labeled_preds, lab_real_preds) + \
-                        self.bce_loss(unlabeled_preds, unlab_real_preds)
+                dsc_loss = self.bce_loss(labeled_preds, lab_real_preds.unsqueeze(1)) + \
+                        self.bce_loss(unlabeled_preds, unlab_real_preds.unsqueeze(1))
                 total_vae_loss = unsup_loss + transductive_loss + self.args.adversary_param * dsc_loss
                 optim_vae.zero_grad()
                 total_vae_loss.backward()
